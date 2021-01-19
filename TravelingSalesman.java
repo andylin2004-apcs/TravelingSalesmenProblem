@@ -1,40 +1,75 @@
 import java.util.*;
-public class TravelingSalesman{
+import java.io.*;
 
-	public static void PossibleRoutes(ArrayList<Distance> cities){
-		//this should get the running list of cities just to append on that
-		//for i in remaining cities
-		//idk about handling what combos to test
-	}
+public class travelingSalesman {
+  public static void main (String[] args) {
+    Scanner sc = new Scanner(System.in);
+    String fileInput = "";
+    while (sc.hasNextLine()) {
+      fileInput = fileInput + sc.nextLine() + "\n";
+    }
+    System.out.println(fileInput);
+    ArrayList<String> cityIndexes = new ArrayList<String>();
 
-	public static void main(String[] args){
-		ArrayList<Distance> cities = new ArrayList<Distance>();
-		Scanner Sca = new Scanner(System.in);
-		String origin = "";
-		String destination = "";
-		int distance = 0;
-		while(Sca.hasNextLine()){
-			String nline = Sca.nextLine();
-			Scanner Scar = new Scanner(nline);
-			int wordcount = 0;
-			while(Scar.hasNext()){
-				String word = Scar.next();
-				if(wordcount == 0)
-					origin = word;
-				if(wordcount == 2)
-					destination = word;
-				if(wordcount == 4)
-					distance = Integer.parseInt(word);
-				wordcount += 1;
-			}
-			Distance city = new Distance(origin, destination, distance);
-			cities.add(city);
-		}
-		for(int i = 0; i < cities.size(); i++){
-			System.out.println(cities.get(i));
-		}
+    sc = new Scanner(fileInput);
+    while (sc.hasNextLine()) {
+      String lines = sc.nextLine();
+      String city1 = lines.split(" ")[0];
+      String city2 = lines.split(" ")[2];
+      //System.out.println(city);
+      if (cityIndexes.contains(city1) == false) {cityIndexes.add(city1);}
+      if (cityIndexes.contains(city2) == false) {cityIndexes.add(city2);}
+    }
+    int[][] table = new int[cityIndexes.size()][cityIndexes.size()];
+    sc = new Scanner(fileInput);
+    while (sc.hasNext()) {
+      String city1 = sc.next();
+      sc.next(); //"to"
+      String city2 = sc.next();
+      sc.next(); // "="
+      int distance = sc.nextInt();
+      System.out.println(city1 + " to " + city2 + " = " + distance);
+      table[cityIndexes.indexOf(city1)][cityIndexes.indexOf(city2)] = distance;
+      table[cityIndexes.indexOf(city2)][cityIndexes.indexOf(city1)] = distance;
+    }
+    //System.out.println(Arrays.deepToString(table));
 
-		//for i in cities
-		//make a running list of cities visited
-	}
+    //actually solve the problem
+    int[] counting = new int[table.length];
+    int minDistance = Integer.MAX_VALUE;
+    while (true) {
+      int dist = 0;
+      for (int i = 1; i < counting.length; i++) {
+        if (containsSpecial(counting,counting[i],i)) {
+          dist = Integer.MAX_VALUE;
+          break;
+        }
+        dist += table[counting[i-1]][counting[i]];
+      }
+      minDistance = Math.min(minDistance,dist);
+      int d = 1;
+      while (true) {
+        //System.out.println(Arrays.toString(counting));
+        if (d <= counting.length && counting[counting.length-d] >= counting.length - 1) {
+          counting[counting.length-d] = 0;
+          d++;
+        } else {
+          break;
+        }
+      }
+      if (d <= counting.length) {
+        counting[counting.length-d]++;
+      } else {break;}
+    }
+
+    System.out.println("\nAnswer: " + minDistance);
+  }
+  public static boolean containsSpecial(final int[] array, final int v, int maxIndex) {
+    for(int i = 0; i < maxIndex; i++) {
+      if(array[i] == v){
+        return true;
+      }
+    }
+    return false;
+  }
 }
