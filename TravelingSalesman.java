@@ -2,7 +2,9 @@ import java.util.*;
 public class TravelingSalesman{
 
 	public static void PossibleRoutes(ArrayList<Distance> cities){
-		
+		//this should get the running list of cities just to append on that
+		//for i in remaining cities
+		//idk about handling what combos to test
 	}
 
 	public static void main(String[] args){
@@ -31,5 +33,8 @@ public class TravelingSalesman{
 		for(int i = 0; i < cities.size(); i++){
 			System.out.println(cities.get(i));
 		}
+
+		//for i in cities
+		//make a running list of cities visited
 	}
 }
