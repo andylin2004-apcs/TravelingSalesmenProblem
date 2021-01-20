@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-public class travelingSalesman {
+public class TravelingSalesman {
   public static void main (String[] args) {
     Scanner sc = new Scanner(System.in);
     String fileInput = "";
@@ -28,7 +28,7 @@ public class travelingSalesman {
       String city2 = sc.next();
       sc.next(); // "="
       int distance = sc.nextInt();
-      System.out.println(city1 + " to " + city2 + " = " + distance);
+      //System.out.println(city1 + " to " + city2 + " = " + distance);
       table[cityIndexes.indexOf(city1)][cityIndexes.indexOf(city2)] = distance;
       table[cityIndexes.indexOf(city2)][cityIndexes.indexOf(city1)] = distance;
     }
@@ -36,6 +36,9 @@ public class travelingSalesman {
 
     //actually solve the problem
     int[] counting = new int[table.length];
+    for (int i = 1; i < counting.length; i++) {
+      counting[i] = i;
+    }
     int minDistance = Integer.MAX_VALUE;
     while (true) {
       int dist = 0;
@@ -46,16 +49,13 @@ public class travelingSalesman {
         }
         dist += table[counting[i-1]][counting[i]];
       }
+      //if (dist != Integer.MAX_VALUE) {
+      //  System.out.println(Arrays.toString(counting));
+      //}
       minDistance = Math.min(minDistance,dist);
-      int d = 1;
-      while (true) {
-        //System.out.println(Arrays.toString(counting));
-        if (d <= counting.length && counting[counting.length-d] >= counting.length - 1) {
+      int d;
+      for (d = 1; d <= counting.length && counting[counting.length-d] >= counting.length - 1; d++) {
           counting[counting.length-d] = 0;
-          d++;
-        } else {
-          break;
-        }
       }
       if (d <= counting.length) {
         counting[counting.length-d]++;
